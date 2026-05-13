@@ -1,5 +1,9 @@
-# Publica o build estático em GitHub Pages (Settings → Pages → Source: GitHub Actions).
-# Secret obrigatório no repositório: VITE_ANTHROPIC_API_KEY (mesmo valor do .env local).
+# GitHub Pages via Actions — em Settings → Pages, Source precisa ser "GitHub Actions".
+# Secret: VITE_ANTHROPIC_API_KEY
+#
+# Se o job "deploy" falhar com 404 ao criar deployment:
+# - Repositório PRIVADO no plano Free não tem Pages (deixe público ou use GitHub Pro/Team).
+# - Confira Settings → Pages → Source = GitHub Actions e salve; rode o workflow de novo.
 
 name: Deploy GitHub Pages
 
@@ -15,13 +19,15 @@ permissions:
 
 concurrency:
   group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
 
       - uses: actions/setup-node@v4
         with:
@@ -41,9 +47,12 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
