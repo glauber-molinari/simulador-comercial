@@ -404,7 +404,7 @@ export default function App() {
                   </span>
                   Ver SOP
                 </button>
-                <span className="app-badge">SOP v1.0</span>
+                <span className="app-badge">SOP v1.1</span>
               </div>
             </div>
           </header>

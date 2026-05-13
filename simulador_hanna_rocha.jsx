@@ -559,7 +559,7 @@ export default function App() {
               letterSpacing: ".04em",
             }}
           >
-            SOP v1.0
+            SOP v1.1
           </div>
         </div>
       </div>
