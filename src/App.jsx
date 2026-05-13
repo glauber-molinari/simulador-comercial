@@ -2,6 +2,9 @@ import { useState, useRef } from "react";
 
 const BRAND = "#B5632A";
 
+/** PDF em `public/` (cópia do SOP comercial). Abre em nova aba ao lado do simulador. */
+const SOP_PDF_HREF = `${import.meta.env.BASE_URL}sop-comercial-hr-fotografia-26.pdf`.replace(/\/{2,}/g, "/");
+
 const SOP_CONTEXT = `
 Você é o assistente de vendas da Hanna Rocha Fotografia, um estúdio premium especializado em fotografia e vídeo de família (Chá Revelação, Book Gestante, Chá de Bebê, Nascimento/Parto, Sessão Família, Batizado, Mêsversário, Aniversários Infantis). Ticket médio de R$ 3.000,00. A venda é feita via WhatsApp.
 
@@ -324,7 +327,21 @@ export default function App() {
               <div className="app-brand-tagline">Simulador de Objeções</div>
             </div>
           </div>
-          <div className="app-badge">SOP v1.0</div>
+          <div className="app-header-actions">
+            <a
+              className="sop-pdf-link"
+              href={SOP_PDF_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Abre o PDF do SOP comercial em uma nova aba"
+            >
+              <span className="sop-pdf-link__icon" aria-hidden>
+                📄
+              </span>
+              Ver SOP
+            </a>
+            <span className="app-badge">SOP v1.0</span>
+          </div>
         </div>
       </header>
 
