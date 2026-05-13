@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 
 const BRAND = "#B5632A";
 
@@ -233,7 +233,60 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [history, setHistory] = useState([]);
+  const [sopPanelOpen, setSopPanelOpen] = useState(false);
+  /** Mantém a coluna direita durante a animação de fechar (iframe some, shell permanece). */
+  const [sopLayoutOpen, setSopLayoutOpen] = useState(false);
+  const closeTimerRef = useRef(null);
   const resultRef = useRef(null);
+  const sopCloseRef = useRef(null);
+
+  const openSopPanel = useCallback(() => {
+    if (closeTimerRef.current) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    setSopLayoutOpen(true);
+    setSopPanelOpen(true);
+  }, []);
+
+  const closeSopPanel = useCallback(() => {
+    setSopPanelOpen(false);
+    setSopLayoutOpen(true);
+    if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = window.setTimeout(() => {
+      setSopLayoutOpen(false);
+      closeTimerRef.current = null;
+    }, 430);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!sopLayoutOpen) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") closeSopPanel();
+    };
+    window.addEventListener("keydown", onKey);
+    const mq = window.matchMedia("(min-width: 821px)");
+    const applyOverflow = () => {
+      document.body.style.overflow = mq.matches ? "hidden" : "";
+    };
+    applyOverflow();
+    mq.addEventListener("change", applyOverflow);
+    const t = window.setTimeout(() => {
+      if (sopPanelOpen) sopCloseRef.current?.focus();
+    }, 90);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      mq.removeEventListener("change", applyOverflow);
+      window.clearTimeout(t);
+      document.body.style.overflow = "";
+    };
+  }, [sopLayoutOpen, sopPanelOpen, closeSopPanel]);
 
   const handleSubmit = async (msgOverride) => {
     const msg = msgOverride || input;
@@ -315,37 +368,48 @@ export default function App() {
   };
 
   return (
-    <div className="app-page">
-      <header className="app-header">
-        <div className="app-header-inner">
-          <div className="app-brand-lockup">
-            <div className="app-logo" aria-hidden>
-              📸
+    <div className={`split-root${sopLayoutOpen ? " split-root--open" : ""}`}>
+      {sopLayoutOpen && (
+        <button
+          type="button"
+          className="split-backdrop"
+          aria-label="Fechar painel do SOP"
+          onClick={closeSopPanel}
+        />
+      )}
+      <div className="split-left">
+        <div className="app-page">
+          <header className="app-header">
+            <div className="app-header-inner">
+              <div className="app-brand-lockup">
+                <div className="app-logo" aria-hidden>
+                  📸
+                </div>
+                <div>
+                  <div className="app-brand-title font-display">Hanna Rocha Fotografia</div>
+                  <div className="app-brand-tagline">Simulador de Objeções</div>
+                </div>
+              </div>
+              <div className="app-header-actions">
+                <button
+                  type="button"
+                  className="sop-pdf-link"
+                  onClick={openSopPanel}
+                  aria-expanded={sopLayoutOpen}
+                  aria-controls="sop-panel"
+                  title="Abre o PDF do SOP ao lado do simulador"
+                >
+                  <span className="sop-pdf-link__icon" aria-hidden>
+                    📄
+                  </span>
+                  Ver SOP
+                </button>
+                <span className="app-badge">SOP v1.0</span>
+              </div>
             </div>
-            <div>
-              <div className="app-brand-title font-display">Hanna Rocha Fotografia</div>
-              <div className="app-brand-tagline">Simulador de Objeções</div>
-            </div>
-          </div>
-          <div className="app-header-actions">
-            <a
-              className="sop-pdf-link"
-              href={SOP_PDF_HREF}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Abre o PDF do SOP comercial em uma nova aba"
-            >
-              <span className="sop-pdf-link__icon" aria-hidden>
-                📄
-              </span>
-              Ver SOP
-            </a>
-            <span className="app-badge">SOP v1.0</span>
-          </div>
-        </div>
-      </header>
+          </header>
 
-      <main className="app-main">
+          <main className="app-main">
         <div className="hero-intro stagger stagger-1">
           <p>
             Cole a mensagem da cliente (objeção ou resposta difícil) e receba{" "}
@@ -446,7 +510,34 @@ export default function App() {
             </div>
           </div>
         )}
-      </main>
+          </main>
+        </div>
+      </div>
+
+      <aside
+        id="sop-panel"
+        className="split-right"
+        aria-hidden={!sopLayoutOpen}
+        aria-label="Documento PDF do SOP comercial"
+        role="complementary"
+      >
+        {sopLayoutOpen && (
+          <div className="sop-panel">
+            <div className="sop-panel__toolbar">
+              <span className="sop-panel__title font-display">SOP — Comercial</span>
+              <div className="sop-panel__actions">
+                <a className="sop-panel__link" href={SOP_PDF_HREF} download="SOP-Comercial-Hanna-Rocha.pdf">
+                  Baixar
+                </a>
+                <button ref={sopCloseRef} type="button" className="sop-panel__close" onClick={closeSopPanel}>
+                  Fechar
+                </button>
+              </div>
+            </div>
+            {sopPanelOpen && <iframe title="SOP comercial Hanna Rocha Fotografia" className="sop-panel__frame" src={SOP_PDF_HREF} />}
+          </div>
+        )}
+      </aside>
     </div>
   );
 }

@@ -65,6 +65,222 @@ body {
   z-index: 1;
 }
 
+/* ----- Split view: simulador à esquerda, PDF do SOP à direita (estilo Claude) ----- */
+.split-root {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+}
+
+.split-left {
+  flex: 1 1 100%;
+  width: 100%;
+  min-width: 0;
+  transition:
+    flex 0.42s var(--ease-out),
+    width 0.42s var(--ease-out);
+}
+
+.split-root.split-root--open {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.split-root.split-root--open .split-left {
+  flex: 1 1 50%;
+  width: 50%;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.split-left .app-page {
+  min-height: min(100vh, 100%);
+}
+
+.split-right {
+  flex: 0 0 0;
+  width: 0;
+  min-width: 0;
+  max-height: 100vh;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    flex 0.42s var(--ease-out),
+    width 0.42s var(--ease-out),
+    opacity 0.22s ease,
+    visibility 0s linear 0.42s;
+  border-left: 1px solid transparent;
+  background: #f4f3f1;
+  display: flex;
+  flex-direction: column;
+}
+
+.split-root--open .split-right {
+  flex: 1 1 50%;
+  width: 50%;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s, 0s, 0s, 0s;
+  border-left-color: rgba(26, 18, 8, 0.12);
+  box-shadow: -18px 0 56px rgba(26, 18, 8, 0.08);
+}
+
+.sop-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+}
+
+.sop-panel__toolbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(26, 18, 8, 0.1);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.sop-panel__title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--dark);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sop-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.sop-panel__link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--brand);
+  text-decoration: none;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(181, 99, 42, 0.35);
+  transition: background 0.15s ease;
+}
+
+.sop-panel__link:hover {
+  background: var(--brand-light);
+}
+
+.sop-panel__close {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(26, 18, 8, 0.14);
+  background: var(--white);
+  color: var(--dark);
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.sop-panel__close:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+}
+
+.sop-panel__frame {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  border: 0;
+  background: #3d3d3d;
+}
+
+.split-backdrop {
+  display: none;
+}
+
+@keyframes backdrop-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 820px) {
+  .split-root--open .split-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 197;
+    border: none;
+    padding: 0;
+    margin: 0;
+    background: rgba(26, 18, 8, 0.45);
+    cursor: pointer;
+    animation: backdrop-fade 0.22s ease;
+  }
+
+  .split-root.split-root--open {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .split-root--open .split-left {
+    flex: 1 1 100%;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .split-right {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(100vw, 540px);
+    max-width: 100%;
+    flex: none !important;
+    z-index: 200;
+    transform: translateX(108%);
+    opacity: 1;
+    visibility: visible;
+    transition: transform 0.38s var(--ease-out);
+    border-left: 1px solid rgba(26, 18, 8, 0.1);
+    box-shadow: -24px 0 64px rgba(26, 18, 8, 0.2);
+    background: #f4f3f1;
+  }
+
+  .split-root--open .split-right {
+    transform: translateX(0);
+  }
+
+  .split-root:not(.split-root--open) .split-right {
+    pointer-events: none;
+    visibility: hidden;
+    transition: transform 0.38s var(--ease-out), visibility 0s linear 0.38s;
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 3px;
@@ -134,6 +350,15 @@ textarea:focus:not(:focus-visible) {
   .loading-dot {
     animation: none !important;
     opacity: 0.65 !important;
+  }
+
+  .split-left,
+  .split-right {
+    transition: none !important;
+  }
+
+  .split-root--open .split-backdrop {
+    animation: none !important;
   }
 
   .btn-primary:hover:not(:disabled),
@@ -244,6 +469,7 @@ textarea:focus:not(:focus-visible) {
   background: var(--white);
   border: 1px solid rgba(26, 18, 8, 0.12);
   box-shadow: 0 2px 10px rgba(26, 18, 8, 0.05);
+  cursor: pointer;
   transition:
     border-color 0.18s ease,
     box-shadow 0.18s ease,
