@@ -1,11 +1,6 @@
 import { useState, useRef } from "react";
 
 const BRAND = "#B5632A";
-const BRAND_LIGHT = "#F9EDE4";
-const DARK = "#1A1208";
-const MID = "#6B5744";
-const LIGHT = "#FDF8F4";
-const WHITE = "#FFFFFF";
 
 const SOP_CONTEXT = `
 Você é o assistente de vendas da Hanna Rocha Fotografia, um estúdio premium especializado em fotografia e vídeo de família (Chá Revelação, Book Gestante, Chá de Bebê, Nascimento/Parto, Sessão Família, Batizado, Mêsversário, Aniversários Infantis). Ticket médio de R$ 3.000,00. A venda é feita via WhatsApp.
@@ -101,27 +96,10 @@ const QUICK_SCENARIOS = [
 
 function LoadingDots() {
   return (
-    <span style={{ display: "inline-flex", gap: 4, alignItems: "center", padding: "2px 0" }}>
+    <span className="loading-dots" aria-hidden="true">
       {[0, 1, 2].map((i) => (
-        <span
-          key={i}
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: "50%",
-            background: BRAND,
-            display: "inline-block",
-            animation: "bounce 1.2s infinite",
-            animationDelay: `${i * 0.2}s`,
-          }}
-        />
+        <span key={i} className="loading-dot" />
       ))}
-      <style>{`
-        @keyframes bounce {
-          0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
-          40% { transform: translateY(-6px); opacity: 1; }
-        }
-      `}</style>
     </span>
   );
 }
@@ -135,25 +113,7 @@ function CopyButton({ text, label }) {
     });
   };
   return (
-    <button
-      type="button"
-      onClick={copy}
-      style={{
-        background: copied ? "#3B6D11" : BRAND,
-        color: WHITE,
-        border: "none",
-        borderRadius: 8,
-        padding: "8px 16px",
-        fontSize: 13,
-        fontFamily: "'DM Sans', sans-serif",
-        fontWeight: 600,
-        cursor: "pointer",
-        transition: "all .2s",
-        display: "flex",
-        alignItems: "center",
-        gap: 6,
-      }}
-    >
+    <button type="button" onClick={copy} className={`copy-btn${copied ? " copy-btn--copied" : ""}`}>
       {copied ? "✓ Copiado!" : label || "📋 Copiar mensagem"}
     </button>
   );
@@ -218,182 +178,44 @@ function ResponseCard({ data }) {
 
   if (!opcoes.length) {
     return (
-      <div
-        style={{
-          background: WHITE,
-          borderRadius: 16,
-          padding: 24,
-          border: `1px solid ${BRAND_LIGHT}`,
-          color: MID,
-          fontSize: 14,
-          fontFamily: "'DM Sans', sans-serif",
-        }}
-      >
+      <div className="response-empty">
         Não foi possível exibir este resultado (formato antigo ou incompleto). Gere novamente a partir da objeção.
       </div>
     );
   }
 
   return (
-    <div
-      style={{
-        background: WHITE,
-        borderRadius: 16,
-        overflow: "hidden",
-        boxShadow: "0 4px 24px rgba(181,99,42,0.10)",
-        border: `1px solid ${BRAND_LIGHT}`,
-        animation: "fadeUp .35s ease",
-      }}
-    >
-      <style>{`@keyframes fadeUp { from { opacity:0; transform:translateY(12px);} to { opacity:1; transform:translateY(0);} }`}</style>
-
-      <div
-        style={{
-          background: etapaColor,
-          padding: "12px 20px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 4,
-        }}
-      >
-        <span
-          style={{
-            color: WHITE,
-            fontSize: 10,
-            fontWeight: 700,
-            letterSpacing: ".12em",
-            textTransform: "uppercase",
-            fontFamily: "'DM Sans', sans-serif",
-            opacity: 0.92,
-          }}
-        >
-          Etapa do SOP
-        </span>
-        <span
-          style={{
-            color: WHITE,
-            fontSize: 13,
-            fontWeight: 700,
-            letterSpacing: ".02em",
-            fontFamily: "'DM Sans', sans-serif",
-            lineHeight: 1.35,
-          }}
-        >
-          {data.etapa?.trim() || "Momento da conversa não informado"}
-        </span>
+    <div className="response-card animate-fade-up">
+      <div className="response-card__header" style={{ background: etapaColor }}>
+        <span className="response-card__meta">Etapa do SOP</span>
+        <span className="response-card__stage">{data.etapa?.trim() || "Momento da conversa não informado"}</span>
       </div>
 
       {opcoes.map((opcao, idx) => (
-        <div
-          key={idx}
-          style={{
-            padding: "20px 24px 16px",
-            borderBottom: idx < opcoes.length - 1 ? `1px solid ${BRAND_LIGHT}` : "none",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 11,
-              fontWeight: 700,
-              color: MID,
-              marginBottom: 12,
-              letterSpacing: ".06em",
-              textTransform: "uppercase",
-              fontFamily: "'DM Sans', sans-serif",
-            }}
-          >
+        <div key={idx} className="response-card__option">
+          <div className="response-option-label">
             Opção {idx + 1} — {opcao.rotulo || "Alternativa"}
           </div>
-          <div
-            style={{
-              background: BRAND_LIGHT,
-              borderRadius: 12,
-              padding: "16px 18px",
-              borderLeft: `4px solid ${BRAND}`,
-              marginBottom: 16,
-              position: "relative",
-            }}
-          >
-            <div
-              style={{
-                fontSize: 11,
-                fontWeight: 700,
-                color: BRAND,
-                marginBottom: 8,
-                fontFamily: "'DM Sans', sans-serif",
-                letterSpacing: ".04em",
-              }}
-            >
-              ✉ MENSAGEM PARA ENVIAR
-            </div>
-            <p
-              style={{
-                margin: 0,
-                fontSize: 14.5,
-                lineHeight: 1.65,
-                color: DARK,
-                fontFamily: "'DM Sans', sans-serif",
-                whiteSpace: "pre-wrap",
-              }}
-            >
-              {opcao.resposta}
-            </p>
+          <div className="response-quote">
+            <div className="response-quote__tag">✉ MENSAGEM PARA ENVIAR</div>
+            <p className="response-quote__text">{opcao.resposta}</p>
           </div>
           <CopyButton text={opcao.resposta} label={`📋 Copiar opção ${idx + 1}`} />
 
-          <div style={{ paddingTop: 16 }}>
-            <div
-              style={{
-                background: "#F1EFE8",
-                borderRadius: 10,
-                padding: "12px 16px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: MID,
-                  marginBottom: 6,
-                  fontFamily: "'DM Sans', sans-serif",
-                  letterSpacing: ".04em",
-                }}
-              >
-                🧠 Por que essa abordagem
-              </div>
-              <p style={{ margin: 0, fontSize: 13, color: MID, lineHeight: 1.6, fontFamily: "'DM Sans', sans-serif" }}>
-                {opcao.raciocinio}
-              </p>
+          <div className="response-rationale">
+            <div className="response-rationale__inner">
+              <div className="response-rationale__tag">🧠 Por que essa abordagem</div>
+              <p className="response-rationale__text">{opcao.raciocinio}</p>
             </div>
           </div>
         </div>
       ))}
 
       {data.alerta && (
-        <div style={{ padding: "12px 24px 20px", borderTop: `1px solid ${BRAND_LIGHT}` }}>
-          <div
-            style={{
-              background: "#FAEEDA",
-              borderRadius: 10,
-              padding: "12px 16px",
-              borderLeft: "3px solid #854F0B",
-            }}
-          >
-            <div
-              style={{
-                fontSize: 11,
-                fontWeight: 700,
-                color: "#854F0B",
-                marginBottom: 6,
-                fontFamily: "'DM Sans', sans-serif",
-                letterSpacing: ".04em",
-              }}
-            >
-              ⚠ ATENÇÃO
-            </div>
-            <p style={{ margin: 0, fontSize: 13, color: "#633806", lineHeight: 1.6, fontFamily: "'DM Sans', sans-serif" }}>
-              {data.alerta}
-            </p>
+        <div className="response-alert-wrap">
+          <div className="response-alert">
+            <div className="response-alert__tag">⚠ ATENÇÃO</div>
+            <p className="response-alert__text">{data.alerta}</p>
           </div>
         </div>
       )}
@@ -490,139 +312,42 @@ export default function App() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: LIGHT,
-        fontFamily: "'DM Sans', sans-serif",
-      }}
-    >
-      <div
-        style={{
-          background: WHITE,
-          borderBottom: `1px solid ${BRAND_LIGHT}`,
-          padding: "0 24px",
-          position: "sticky",
-          top: 0,
-          zIndex: 100,
-          boxShadow: "0 1px 12px rgba(181,99,42,0.07)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 720,
-            margin: "0 auto",
-            padding: "14px 0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                background: BRAND,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 18,
-              }}
-            >
+    <div className="app-page">
+      <header className="app-header">
+        <div className="app-header-inner">
+          <div className="app-brand-lockup">
+            <div className="app-logo" aria-hidden>
               📸
             </div>
             <div>
-              <div
-                style={{
-                  fontSize: 15,
-                  fontWeight: 700,
-                  color: DARK,
-                  fontFamily: "'Playfair Display', serif",
-                  lineHeight: 1.1,
-                }}
-              >
-                Hanna Rocha Fotografia
-              </div>
-              <div style={{ fontSize: 11, color: MID, fontWeight: 500 }}>Simulador de Objeções</div>
+              <div className="app-brand-title font-display">Hanna Rocha Fotografia</div>
+              <div className="app-brand-tagline">Simulador de Objeções</div>
             </div>
           </div>
-          <div
-            style={{
-              background: BRAND_LIGHT,
-              borderRadius: 20,
-              padding: "4px 12px",
-              fontSize: 11,
-              fontWeight: 700,
-              color: BRAND,
-              letterSpacing: ".04em",
-            }}
-          >
-            SOP v1.0
-          </div>
+          <div className="app-badge">SOP v1.0</div>
         </div>
-      </div>
+      </header>
 
-      <div style={{ maxWidth: 720, margin: "0 auto", padding: "24px 16px 80px" }}>
-        <div
-          style={{
-            background: WHITE,
-            borderRadius: 16,
-            padding: "20px 24px",
-            border: `1px solid ${BRAND_LIGHT}`,
-            marginBottom: 24,
-            borderLeft: `4px solid ${BRAND}`,
-          }}
-        >
-          <p style={{ margin: 0, fontSize: 14, color: MID, lineHeight: 1.7 }}>
+      <main className="app-main">
+        <div className="hero-intro stagger stagger-1">
+          <p>
             Cole a mensagem da cliente (objeção ou resposta difícil) e receba{" "}
-            <strong style={{ color: DARK }}>duas alternativas</strong> de texto para o WhatsApp segundo o SOP — cada uma com o raciocínio da abordagem,
-            a etapa do fluxo em que você está e alertas quando fizer sentido.
+            <strong>duas alternativas</strong> de texto para o WhatsApp segundo o SOP — cada uma com o raciocínio da abordagem, a etapa do fluxo em que você está e alertas quando fizer sentido.
           </p>
         </div>
 
-        <div style={{ marginBottom: 24 }}>
-          <div
-            style={{
-              fontSize: 11,
-              fontWeight: 700,
-              color: MID,
-              marginBottom: 10,
-              letterSpacing: ".06em",
-              textTransform: "uppercase",
-            }}
-          >
-            Objeções rápidas
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        <div className="mb-lg stagger stagger-2">
+          <div className="section-label font-display">Objeções rápidas</div>
+          <div className="chip-row">
             {QUICK_SCENARIOS.map((s) => (
               <button
                 key={s.label}
                 type="button"
+                className="chip-btn"
+                disabled={loading}
                 onClick={() => {
                   setInput(s.msg);
                   handleSubmit(s.msg);
-                }}
-                style={{
-                  background: WHITE,
-                  border: `1.5px solid ${BRAND_LIGHT}`,
-                  borderRadius: 20,
-                  padding: "6px 14px",
-                  fontSize: 12.5,
-                  color: BRAND,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  fontFamily: "'DM Sans', sans-serif",
-                  transition: "all .15s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = BRAND_LIGHT;
-                  e.currentTarget.style.borderColor = BRAND;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = WHITE;
-                  e.currentTarget.style.borderColor = BRAND_LIGHT;
                 }}
               >
                 {s.label}
@@ -631,239 +356,80 @@ export default function App() {
           </div>
         </div>
 
-        <div
-          style={{
-            background: WHITE,
-            borderRadius: 16,
-            padding: "20px",
-            border: `1px solid ${BRAND_LIGHT}`,
-            marginBottom: 16,
-            boxShadow: "0 2px 12px rgba(181,99,42,0.06)",
-          }}
-        >
-          <div style={{ marginBottom: 16 }}>
-            <label
-              style={{
-                fontSize: 12,
-                fontWeight: 700,
-                color: BRAND,
-                letterSpacing: ".05em",
-                textTransform: "uppercase",
-                display: "block",
-                marginBottom: 8,
-              }}
-            >
+        <div className="panel stagger stagger-3">
+          <div className="field-group">
+            <label className="field-label field-label--brand" htmlFor="client-msg">
               Mensagem da cliente *
             </label>
             <textarea
+              id="client-msg"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSubmit();
               }}
               placeholder="Cole ou digite aqui o que a cliente escreveu no WhatsApp..."
-              style={{
-                width: "100%",
-                minHeight: 100,
-                resize: "vertical",
-                border: `1.5px solid ${BRAND_LIGHT}`,
-                borderRadius: 10,
-                padding: "12px 14px",
-                fontSize: 14,
-                color: DARK,
-                fontFamily: "'DM Sans', sans-serif",
-                lineHeight: 1.6,
-                outline: "none",
-                boxSizing: "border-box",
-                background: LIGHT,
-                transition: "border-color .15s",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = BRAND;
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = BRAND_LIGHT;
-              }}
+              className="textarea-field"
+              rows={4}
             />
           </div>
 
-          <div style={{ marginBottom: 20 }}>
-            <label
-              style={{
-                fontSize: 12,
-                fontWeight: 700,
-                color: MID,
-                letterSpacing: ".05em",
-                textTransform: "uppercase",
-                display: "block",
-                marginBottom: 8,
-              }}
-            >
+          <div className="field-group">
+            <label className="field-label field-label--mid" htmlFor="ctx-msg">
               Contexto da conversa (opcional)
             </label>
             <textarea
+              id="ctx-msg"
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              placeholder="Ex: cliente gestante, DPP em julho, Einstein. Já recebeu o portfólio e o orçamento. Somiu por 5 dias..."
-              style={{
-                width: "100%",
-                minHeight: 60,
-                resize: "vertical",
-                border: "1.5px solid #E8E6E0",
-                borderRadius: 10,
-                padding: "10px 14px",
-                fontSize: 13,
-                color: MID,
-                fontFamily: "'DM Sans', sans-serif",
-                lineHeight: 1.6,
-                outline: "none",
-                boxSizing: "border-box",
-                background: LIGHT,
-                transition: "border-color .15s",
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = MID;
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = "#E8E6E0";
-              }}
+              placeholder="Ex: cliente gestante, DPP em julho, Einstein. Já recebeu o portfólio e o orçamento. Sumiu por 5 dias..."
+              className="textarea-field textarea-field--secondary"
+              rows={3}
             />
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
-            <span style={{ fontSize: 12, color: "#AAA" }}>Ctrl + Enter (Windows) ou ⌘ + Enter (Mac) para enviar</span>
-            <button
-              type="button"
-              onClick={() => handleSubmit()}
-              disabled={loading || !input.trim()}
-              style={{
-                background: loading || !input.trim() ? "#D4B8A8" : BRAND,
-                color: WHITE,
-                border: "none",
-                borderRadius: 10,
-                padding: "11px 28px",
-                fontSize: 14,
-                fontWeight: 700,
-                cursor: loading || !input.trim() ? "not-allowed" : "pointer",
-                fontFamily: "'DM Sans', sans-serif",
-                transition: "all .2s",
-                letterSpacing: ".02em",
-              }}
-            >
+          <div className="form-actions">
+            <span className="form-hint">Ctrl + Enter (Windows) ou ⌘ + Enter (Mac) para enviar</span>
+            <button type="button" className="btn-primary" onClick={() => handleSubmit()} disabled={loading || !input.trim()}>
               {loading ? "Gerando..." : "Gerar 2 opções →"}
             </button>
           </div>
         </div>
 
         {loading && (
-          <div
-            style={{
-              background: WHITE,
-              borderRadius: 16,
-              padding: "28px 24px",
-              border: `1px solid ${BRAND_LIGHT}`,
-              textAlign: "center",
-              marginBottom: 20,
-            }}
-          >
+          <div className="loading-panel stagger stagger-4" aria-busy="true" aria-live="polite">
             <LoadingDots />
-            <p style={{ margin: "12px 0 0", fontSize: 13, color: MID }}>
-              Consultando o SOP e gerando duas alternativas de resposta...
-            </p>
+            <p>Consultando o SOP e gerando duas alternativas de resposta...</p>
           </div>
         )}
 
         {error && (
-          <div
-            style={{
-              background: "#FCEBEB",
-              borderRadius: 12,
-              padding: "16px 20px",
-              border: "1px solid #F7C1C1",
-              marginBottom: 20,
-              color: "#A32D2D",
-              fontSize: 14,
-            }}
-          >
+          <div className="alert-error" role="alert">
             {error}
           </div>
         )}
 
         {result && !loading && (
-          <div ref={resultRef} style={{ marginBottom: 32 }}>
-            <div
-              style={{
-                fontSize: 11,
-                fontWeight: 700,
-                color: MID,
-                marginBottom: 10,
-                letterSpacing: ".06em",
-                textTransform: "uppercase",
-              }}
-            >
-              Duas opções geradas
-            </div>
+          <div ref={resultRef} className="mb-lg">
+            <div className="section-label section-label--micro mb-md">Duas opções geradas</div>
             <ResponseCard data={result} />
           </div>
         )}
 
         {history.length > 1 && (
           <div>
-            <div
-              style={{
-                fontSize: 11,
-                fontWeight: 700,
-                color: MID,
-                marginBottom: 12,
-                letterSpacing: ".06em",
-                textTransform: "uppercase",
-              }}
-            >
-              Histórico da sessão
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div className="section-label section-label--micro mb-md">Histórico da sessão</div>
+            <div className="history-stack">
               {history.slice(1).map((item, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => loadHistory(item)}
-                  style={{
-                    background: WHITE,
-                    border: `1px solid ${BRAND_LIGHT}`,
-                    borderRadius: 10,
-                    padding: "10px 16px",
-                    textAlign: "left",
-                    cursor: "pointer",
-                    fontFamily: "'DM Sans', sans-serif",
-                    transition: "all .15s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = BRAND;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = BRAND_LIGHT;
-                  }}
-                >
-                  <div style={{ fontSize: 12, color: BRAND, fontWeight: 600, marginBottom: 2 }}>
-                    {item.result?.etapa || "Resposta"}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 13,
-                      color: MID,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    &quot;{item.msg}&quot;
-                  </div>
+                <button key={`${item.ts?.getTime?.() ?? i}-${item.msg.slice(0, 24)}`} type="button" className="history-btn" onClick={() => loadHistory(item)}>
+                  <div className="history-stage">{item.result?.etapa || "Resposta"}</div>
+                  <div className="history-msg">&quot;{item.msg}&quot;</div>
                 </button>
               ))}
             </div>
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }
