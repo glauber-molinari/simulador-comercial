@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 
 const BRAND = "#B5632A";
 
-/** PDF em `public/` (cópia do SOP comercial). Abre em nova aba ao lado do simulador. */
 const SOP_PDF_HREF = `${import.meta.env.BASE_URL}sop-comercial-hr-fotografia-26.pdf`.replace(/\/{2,}/g, "/");
 
 const SOP_CONTEXT = `
@@ -54,7 +53,7 @@ MATERNIDADES ATENDIDAS: Albert Einstein, São Luiz Star, ProMatre Paulista, Sant
 
 FOCO DO SIMULADOR: Tratamento de objeções e respostas difíceis no WhatsApp — preço, comparação, adiamento, equipe vs Hanna, parcelamento, insatisfação, disponibilidade e silêncio.
 
-SUA FUNÇÃO: Quando a Amanda (atendente comercial) te enviar uma mensagem recebida de uma cliente (objeção ou resposta difícil), você deve gerar DUAS alternativas de mensagem para WhatsApp, ambas fiéis ao SOP acima, porém com ÂNGULOS DIFERENTES (ex.: opção 1 mais acolhedora/emoção e storytelling; opção 2 mais objetiva/clara em próximo passo e valor — ou uma mais suave e outra mais firme em política, sempre respeitando o tom premium). Cada alternativa deve:
+SUA FUNÇÃO: Quando a Amanda (atendente comercial) te enviar uma mensagem recebida de uma cliente (objeção ou resposta difícil) — ou um print da conversa —, você deve gerar DUAS alternativas de mensagem para WhatsApp, ambas fiéis ao SOP acima, porém com ÂNGULOS DIFERENTES (ex.: opção 1 mais acolhedora/emoção e storytelling; opção 2 mais objetiva/clara em próximo passo e valor — ou uma mais suave e outra mais firme em política, sempre respeitando o tom premium). Cada alternativa deve:
 - Ter tom emocional e acolhedor da marca
 - Usar emojis com moderação
 - Ser direta e acionável; adequada ao WhatsApp (evitar textos excessivamente longos)
@@ -84,6 +83,60 @@ Responda SEMPRE em JSON válido com este formato exato (sem markdown, sem texto 
 Regras do array "opcoes": exatamente 2 objetos; as duas "resposta" devem ser mensagens distintas (não repetir o mesmo texto).
 `;
 
+const ASSISTANT_CONTEXT = `
+Você é o Assistente Comercial da Hanna Rocha Fotografia, um estúdio premium especializado em fotografia e vídeo de família (Chá Revelação, Book Gestante, Chá de Bebê, Nascimento/Parto, Sessão Família, Batizado, Mêsversário, Aniversários Infantis). Ticket médio de R$ 3.000,00. A venda é feita via WhatsApp.
+
+PERFIL DA CLIENTE IDEAL: Mães e gestantes da classe A/B, emocionalmente envolvidas com o momento de vida que estão vivendo. A decisão de compra é altamente emocional.
+
+OS 5 DIFERENCIAIS DA HANNA ROCHA:
+1. Somente a Hanna já fotografou mais de 1.800 partos — trajetória que nenhum concorrente tem
+2. Reconhecimento das equipes médicas nas principais maternidades de SP (Einstein, ProMatre, São Luiz Star, Santa Joana, Santa Maria)
+3. Abordagem humanizada — a equipe entra na sala como alguém que entende o que aquele momento significa
+4. Olhar artístico com identidade própria — fotos com estética reconhecível, luz e emoção
+5. Processo estruturado do primeiro contato ao álbum físico
+
+REGRAS DE DESCONTO:
+- Desconto padrão: até 8% — Amanda pode conceder diretamente
+- Desconto excepcional: até 10% — OBRIGATÓRIO aprovação da Hanna e do Glauber ANTES de comunicar à cliente
+- Pagamento no cartão de crédito: os juros são repassados ao cliente — não há absorção pela empresa
+- PROIBIDO: descontos progressivos na mesma conversa
+
+POLÍTICA EQUIPE VS HANNA:
+- Toda cliente é atendida pela Equipe Hanna Rocha — fotógrafas treinadas pessoalmente pela Hanna há mais de 2 anos
+- A Hanna atua diretamente apenas em casos especiais e conforme disponibilidade de agenda
+- NUNCA apresente a equipe como "plano B" — ela é o produto
+- Como comunicar: "A fotógrafa que vai estar com você faz parte da nossa equipe há mais de 2 anos, foi treinada pessoalmente pela Hanna e carrega o mesmo olhar e cuidado."
+
+FORMAS DE PAGAMENTO:
+- PIX à vista: 5% de desconto
+- PIX parcelado em até 4x sem juros
+- Cartão de crédito em até 6x COM juros (repassados ao cliente)
+
+COMBO PRIORITÁRIO: Parto + Book Gestante (sempre oferecer primeiro para elevar ticket)
+
+CADÊNCIA DE FOLLOW-UP OBRIGATÓRIA:
+- Follow 1 (24h): operacional/gentil
+- Follow 2 (48h): emocional, reacende o sonho
+- Follow 3 (72h): urgência real de agenda
+- Follow 4 (5 dias): nova perspectiva/produto complementar
+- Follow 5 (8 dias): encerramento humanizado
+
+ENCERRAMENTO HUMANIZADO: NUNCA usar "estou encerrando o atendimento". Sempre deixar a porta aberta com carinho.
+
+PROTOCOLOS DE CRISE:
+- Insatisfação com fotos: reconhecer, não minimizar, escalar para Hanna em até 24h
+- Cliente difícil/agressiva: respirar antes de responder, oferecer ligação, nunca devolver agressividade, acionar Hanna com print e contexto
+- Erro de preço: reconhecer diretamente, corrigir imediatamente
+
+MATERNIDADES ATENDIDAS: Albert Einstein, São Luiz Star, ProMatre Paulista, Santa Joana, Santa Maria.
+
+SUA FUNÇÃO: Você é o assistente de apoio à equipe comercial da Hanna Rocha Fotografia. Responda dúvidas gerais sobre o processo de venda, protocolos do SOP, preços, políticas de desconto, maternidades atendidas, formas de pagamento, cadência de follow-up e qualquer outra dúvida operacional ou estratégica da venda.
+
+Se a equipe enviar um print ou captura de tela de uma conversa de WhatsApp, analise o contexto visível na imagem e sugira a melhor abordagem para o momento da venda.
+
+Responda sempre em texto livre, de forma direta e prática. Não retorne JSON. Use parágrafos curtos e listas quando útil para clareza. Seja fiel ao SOP. Evite uso excessivo de asteriscos para formatação; prefira texto limpo com quebras de linha.
+`;
+
 const QUICK_SCENARIOS = [
   { label: "Achei caro 💸", msg: "Achei um pouco caro, não tem como fazer mais barato?" },
   { label: "Vou pensar 🤔", msg: "Vou pensar e te falo depois" },
@@ -96,6 +149,31 @@ const QUICK_SCENARIOS = [
   { label: "Maternidade fora 🏥", msg: "Minha maternidade é o Hospital Santa Cruz em Santo André, vocês atendem?" },
   { label: "Sem resposta 🔕", msg: "Oi? Mandei mensagem há 3 dias e não tive resposta..." },
 ];
+
+function addImageToList(file, setter) {
+  if (!file || !file.type.startsWith("image/")) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = {
+      data: e.target.result.split(",")[1],
+      mediaType: file.type,
+      previewUrl: e.target.result,
+    };
+    setter((prev) => (prev.length < 5 ? [...prev, img] : prev));
+  };
+  reader.readAsDataURL(file);
+}
+
+function buildUserContent(text, images) {
+  if (!images || images.length === 0) return text;
+  return [
+    ...images.map((img) => ({
+      type: "image",
+      source: { type: "base64", media_type: img.mediaType, data: img.data },
+    })),
+    { type: "text", text: text || "Analise estes prints de conversa." },
+  ];
+}
 
 function LoadingDots() {
   return (
@@ -127,7 +205,6 @@ function normalizeAlerta(val) {
   return String(val);
 }
 
-/** Aceita JSON novo (opcoes[]) ou legado (resposta + raciocinio) para histórico antigo. */
 function normalizeApiResult(parsed) {
   if (!parsed || typeof parsed !== "object") return null;
   if (Array.isArray(parsed.opcoes) && parsed.opcoes.length >= 2) {
@@ -176,9 +253,7 @@ function ResponseCard({ data }) {
   };
   const etapaColor =
     Object.entries(etapaColors).find(([k]) => data.etapa?.includes(k))?.[1] || BRAND;
-
   const opcoes = Array.isArray(data.opcoes) ? data.opcoes : [];
-
   if (!opcoes.length) {
     return (
       <div className="response-empty">
@@ -186,14 +261,12 @@ function ResponseCard({ data }) {
       </div>
     );
   }
-
   return (
     <div className="response-card animate-fade-up">
       <div className="response-card__header" style={{ background: etapaColor }}>
         <span className="response-card__meta">Etapa do SOP</span>
         <span className="response-card__stage">{data.etapa?.trim() || "Momento da conversa não informado"}</span>
       </div>
-
       {opcoes.map((opcao, idx) => (
         <div key={idx} className="response-card__option">
           <div className="response-option-label">
@@ -204,7 +277,6 @@ function ResponseCard({ data }) {
             <p className="response-quote__text">{opcao.resposta}</p>
           </div>
           <CopyButton text={opcao.resposta} label={`📋 Copiar opção ${idx + 1}`} />
-
           <div className="response-rationale">
             <div className="response-rationale__inner">
               <div className="response-rationale__tag">🧠 Por que essa abordagem</div>
@@ -213,7 +285,6 @@ function ResponseCard({ data }) {
           </div>
         </div>
       ))}
-
       {data.alerta && (
         <div className="response-alert-wrap">
           <div className="response-alert">
@@ -226,19 +297,97 @@ function ResponseCard({ data }) {
   );
 }
 
+function ImagePreviewList({ images, onRemove }) {
+  if (!images.length) return null;
+  return (
+    <div className="image-preview-list">
+      {images.map((img, i) => (
+        <div key={i} className="image-preview">
+          <img src={img.previewUrl} alt={`Print ${i + 1}`} className="image-preview__thumb" />
+          <button
+            type="button"
+            className="image-preview__remove"
+            onClick={() => onRemove(i)}
+            aria-label={`Remover imagem ${i + 1}`}
+          >
+            ×
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function renderBubbleText(text) {
+  return text.split(/(\*\*[^*]+\*\*)/g).map((seg, i) =>
+    i % 2 === 1 ? <strong key={i}>{seg.slice(2, -2)}</strong> : seg
+  );
+}
+
+function ChatBubble({ role, content }) {
+  const renderContent = () => {
+    if (typeof content === "string") {
+      return <p className="chat-bubble__text">{renderBubbleText(content)}</p>;
+    }
+    if (Array.isArray(content)) {
+      return content.map((item, i) => {
+        if (item.type === "image") {
+          return (
+            <img
+              key={i}
+              src={`data:${item.source.media_type};base64,${item.source.data}`}
+              alt="Print"
+              className="chat-bubble__img"
+            />
+          );
+        }
+        if (item.type === "text" && item.text) {
+          return (
+            <p key={i} className="chat-bubble__text">
+              {renderBubbleText(item.text)}
+            </p>
+          );
+        }
+        return null;
+      });
+    }
+    return null;
+  };
+  return (
+    <div className={`chat-bubble-wrap chat-bubble-wrap--${role}`}>
+      <div className={`chat-bubble chat-bubble--${role}`}>{renderContent()}</div>
+    </div>
+  );
+}
+
 export default function App() {
+  const [activeMode, setActiveMode] = useState("objections");
+
+  // Objections mode
   const [input, setInput] = useState("");
   const [context, setContext] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [history, setHistory] = useState([]);
+  const [attachedImagesObj, setAttachedImagesObj] = useState([]);
+
+  // Assistant mode
+  const [assistantMessages, setAssistantMessages] = useState([]);
+  const [assistantInput, setAssistantInput] = useState("");
+  const [assistantLoading, setAssistantLoading] = useState(false);
+  const [assistantError, setAssistantError] = useState(null);
+  const [attachedImagesAst, setAttachedImagesAst] = useState([]);
+
+  // SOP panel
   const [sopPanelOpen, setSopPanelOpen] = useState(false);
-  /** Mantém a coluna direita durante a animação de fechar (iframe some, shell permanece). */
   const [sopLayoutOpen, setSopLayoutOpen] = useState(false);
   const closeTimerRef = useRef(null);
   const resultRef = useRef(null);
   const sopCloseRef = useRef(null);
+  const chatMessagesRef = useRef(null);
+  const fileInputObjRef = useRef(null);
+  const fileInputAstRef = useRef(null);
 
   const openSopPanel = useCallback(() => {
     if (closeTimerRef.current) {
@@ -288,13 +437,31 @@ export default function App() {
     };
   }, [sopLayoutOpen, sopPanelOpen, closeSopPanel]);
 
-  const handleSubmit = async (msgOverride) => {
-    const msg = msgOverride || input;
-    if (!msg.trim()) return;
+  useEffect(() => {
+    if (chatMessagesRef.current) {
+      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+    }
+  }, [assistantMessages, assistantLoading]);
 
+  const getApiKey = () => {
     const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
     if (!apiKey?.trim()) {
-      setError("Configure VITE_ANTHROPIC_API_KEY no arquivo .env na raiz do projeto (copie .env.example). Reinicie o servidor após salvar.");
+      throw new Error(
+        "Configure VITE_ANTHROPIC_API_KEY no arquivo .env na raiz do projeto (copie .env.example). Reinicie o servidor após salvar."
+      );
+    }
+    return apiKey.trim();
+  };
+
+  const handleSubmit = async (msgOverride) => {
+    const msg = msgOverride || input;
+    if (!msg.trim() && !attachedImagesObj.length) return;
+
+    let apiKey;
+    try {
+      apiKey = getApiKey();
+    } catch (e) {
+      setError(e.message);
       setResult(null);
       return;
     }
@@ -303,16 +470,22 @@ export default function App() {
     setResult(null);
     setError(null);
 
-    const userPrompt = context.trim()
-      ? `Contexto da conversa: ${context.trim()}\n\nMensagem mais recente da cliente: "${msg}"`
-      : `Mensagem da cliente: "${msg}"`;
+    const baseText = msg.trim()
+      ? context.trim()
+        ? `Contexto da conversa: ${context.trim()}\n\nMensagem mais recente da cliente: "${msg}"`
+        : `Mensagem da cliente: "${msg}"`
+      : context.trim()
+      ? `Contexto da conversa: ${context.trim()}\n\nAnalise o(s) print(s) e gere duas opções de resposta para a situação identificada.`
+      : `Analise o(s) print(s) da conversa e gere duas opções de resposta.`;
+
+    const userContent = buildUserContent(baseText, attachedImagesObj);
 
     try {
       const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": apiKey.trim(),
+          "x-api-key": apiKey,
           "anthropic-version": "2023-06-01",
           "anthropic-dangerous-direct-browser-access": "true",
         },
@@ -320,12 +493,11 @@ export default function App() {
           model: "claude-sonnet-4-20250514",
           max_tokens: 2048,
           system: SOP_CONTEXT,
-          messages: [{ role: "user", content: userPrompt }],
+          messages: [{ role: "user", content: userContent }],
         }),
       });
 
       const data = await response.json();
-
       if (!response.ok) {
         const apiMsg = data.error?.message || data.message || `Erro HTTP ${response.status}`;
         throw new Error(apiMsg);
@@ -352,6 +524,7 @@ export default function App() {
       setResult(normalized);
       setHistory((h) => [{ msg, context: context.trim(), result: normalized, ts: new Date() }, ...h.slice(0, 9)]);
       if (!msgOverride) setInput("");
+      setAttachedImagesObj([]);
       setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
     } catch (e) {
       setError(e.message || "Erro ao gerar resposta. Tente novamente.");
@@ -360,11 +533,106 @@ export default function App() {
     }
   };
 
+  const handleAssistantSubmit = async () => {
+    const msg = assistantInput.trim();
+    if (!msg && !attachedImagesAst.length) return;
+
+    let apiKey;
+    try {
+      apiKey = getApiKey();
+    } catch (e) {
+      setAssistantError(e.message);
+      return;
+    }
+
+    const textForContent = msg || "Analise estes prints de conversa e sugira a melhor abordagem.";
+    const userContent = buildUserContent(textForContent, attachedImagesAst);
+    const newMessage = { role: "user", content: userContent };
+    const updatedMessages = [...assistantMessages, newMessage];
+
+    setAssistantMessages(updatedMessages);
+    setAssistantInput("");
+    setAttachedImagesAst([]);
+    setAssistantLoading(true);
+    setAssistantError(null);
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01",
+          "anthropic-dangerous-direct-browser-access": "true",
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1024,
+          system: ASSISTANT_CONTEXT,
+          messages: updatedMessages,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        const apiMsg = data.error?.message || data.message || `Erro HTTP ${response.status}`;
+        throw new Error(apiMsg);
+      }
+
+      const responseText = data.content?.[0]?.text || "";
+      setAssistantMessages((prev) => [...prev, { role: "assistant", content: responseText }]);
+    } catch (e) {
+      setAssistantError(e.message || "Erro ao gerar resposta. Tente novamente.");
+    } finally {
+      setAssistantLoading(false);
+    }
+  };
+
+  const handleNewChat = () => {
+    if (activeMode === "objections") {
+      setInput("");
+      setContext("");
+      setResult(null);
+      setError(null);
+      setHistory([]);
+      setAttachedImagesObj([]);
+    } else {
+      setAssistantMessages([]);
+      setAssistantInput("");
+      setAssistantError(null);
+      setAttachedImagesAst([]);
+    }
+  };
+
   const loadHistory = (item) => {
     setInput(item.msg);
     setContext(item.context);
     setResult(normalizeApiResult(item.result) || item.result);
     setError(null);
+  };
+
+  const handlePasteObj = (e) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (const item of items) {
+      if (item.type.startsWith("image/")) {
+        const file = item.getAsFile();
+        if (file) addImageToList(file, setAttachedImagesObj);
+        break;
+      }
+    }
+  };
+
+  const handlePasteAst = (e) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (const item of items) {
+      if (item.type.startsWith("image/")) {
+        const file = item.getAsFile();
+        if (file) addImageToList(file, setAttachedImagesAst);
+        break;
+      }
+    }
   };
 
   return (
@@ -387,10 +655,15 @@ export default function App() {
                 </div>
                 <div>
                   <div className="app-brand-title font-display">Hanna Rocha Fotografia</div>
-                  <div className="app-brand-tagline">Simulador de Objeções</div>
+                  <div className="app-brand-tagline">
+                    {activeMode === "objections" ? "Simulador de Objeções" : "Assistente Comercial"}
+                  </div>
                 </div>
               </div>
               <div className="app-header-actions">
+                <button type="button" className="new-chat-btn" onClick={handleNewChat}>
+                  + Novo Chat
+                </button>
                 <button
                   type="button"
                   className="sop-pdf-link"
@@ -404,112 +677,268 @@ export default function App() {
                   </span>
                   Ver SOP
                 </button>
-                <span className="app-badge">SOP v1.1</span>
+                <span className="app-badge">SOP v2.0</span>
               </div>
             </div>
           </header>
 
           <main className="app-main">
-        <div className="hero-intro stagger stagger-1">
-          <p>
-            Cole a mensagem da cliente (objeção ou resposta difícil) e receba{" "}
-            <strong>duas alternativas</strong> de texto para o WhatsApp segundo o SOP — cada uma com o raciocínio da abordagem, a etapa do fluxo em que você está e alertas quando fizer sentido.
-          </p>
-        </div>
-
-        <div className="mb-lg stagger stagger-2">
-          <div className="section-label font-display">Objeções rápidas</div>
-          <div className="chip-row">
-            {QUICK_SCENARIOS.map((s) => (
+            <div className="mode-tabs stagger stagger-1">
               <button
-                key={s.label}
                 type="button"
-                className="chip-btn"
-                disabled={loading}
-                onClick={() => {
-                  setInput(s.msg);
-                  handleSubmit(s.msg);
-                }}
+                className={`mode-tab${activeMode === "objections" ? " mode-tab--active" : ""}`}
+                onClick={() => setActiveMode("objections")}
               >
-                {s.label}
+                Simulador de Objeções
               </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="panel stagger stagger-3">
-          <div className="field-group">
-            <label className="field-label field-label--brand" htmlFor="client-msg">
-              Mensagem da cliente *
-            </label>
-            <textarea
-              id="client-msg"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSubmit();
-              }}
-              placeholder="Cole ou digite aqui o que a cliente escreveu no WhatsApp..."
-              className="textarea-field"
-              rows={4}
-            />
-          </div>
-
-          <div className="field-group">
-            <label className="field-label field-label--mid" htmlFor="ctx-msg">
-              Contexto da conversa (opcional)
-            </label>
-            <textarea
-              id="ctx-msg"
-              value={context}
-              onChange={(e) => setContext(e.target.value)}
-              placeholder="Ex: cliente gestante, DPP em julho, Einstein. Já recebeu o portfólio e o orçamento. Sumiu por 5 dias..."
-              className="textarea-field textarea-field--secondary"
-              rows={3}
-            />
-          </div>
-
-          <div className="form-actions">
-            <span className="form-hint">Ctrl + Enter (Windows) ou ⌘ + Enter (Mac) para enviar</span>
-            <button type="button" className="btn-primary" onClick={() => handleSubmit()} disabled={loading || !input.trim()}>
-              {loading ? "Gerando..." : "Gerar 2 opções →"}
-            </button>
-          </div>
-        </div>
-
-        {loading && (
-          <div className="loading-panel stagger stagger-4" aria-busy="true" aria-live="polite">
-            <LoadingDots />
-            <p>Consultando o SOP e gerando duas alternativas de resposta...</p>
-          </div>
-        )}
-
-        {error && (
-          <div className="alert-error" role="alert">
-            {error}
-          </div>
-        )}
-
-        {result && !loading && (
-          <div ref={resultRef} className="mb-lg">
-            <div className="section-label section-label--micro mb-md">Duas opções geradas</div>
-            <ResponseCard data={result} />
-          </div>
-        )}
-
-        {history.length > 1 && (
-          <div>
-            <div className="section-label section-label--micro mb-md">Histórico da sessão</div>
-            <div className="history-stack">
-              {history.slice(1).map((item, i) => (
-                <button key={`${item.ts?.getTime?.() ?? i}-${item.msg.slice(0, 24)}`} type="button" className="history-btn" onClick={() => loadHistory(item)}>
-                  <div className="history-stage">{item.result?.etapa || "Resposta"}</div>
-                  <div className="history-msg">&quot;{item.msg}&quot;</div>
-                </button>
-              ))}
+              <button
+                type="button"
+                className={`mode-tab${activeMode === "assistant" ? " mode-tab--active" : ""}`}
+                onClick={() => setActiveMode("assistant")}
+              >
+                Assistente Comercial
+              </button>
             </div>
-          </div>
-        )}
+
+            {activeMode === "objections" && (
+              <>
+                <div className="hero-intro stagger stagger-2">
+                  <p>
+                    Cole a mensagem da cliente (objeção ou resposta difícil) e receba{" "}
+                    <strong>duas alternativas</strong> de texto para o WhatsApp segundo o SOP — cada uma com o
+                    raciocínio da abordagem, a etapa do fluxo em que você está e alertas quando fizer sentido.
+                    Você também pode <strong>colar um print</strong> da conversa com Ctrl+V.
+                  </p>
+                </div>
+
+                <div className="mb-lg stagger stagger-2">
+                  <div className="section-label font-display">Objeções rápidas</div>
+                  <div className="chip-row">
+                    {QUICK_SCENARIOS.map((s) => (
+                      <button
+                        key={s.label}
+                        type="button"
+                        className="chip-btn"
+                        disabled={loading}
+                        onClick={() => {
+                          setInput(s.msg);
+                          handleSubmit(s.msg);
+                        }}
+                      >
+                        {s.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="panel stagger stagger-3">
+                  <div className="field-group">
+                    <label className="field-label field-label--brand" htmlFor="client-msg">
+                      Mensagem da cliente *
+                    </label>
+                    <textarea
+                      id="client-msg"
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSubmit();
+                      }}
+                      onPaste={handlePasteObj}
+                      placeholder="Cole ou digite aqui o que a cliente escreveu no WhatsApp... ou cole um print (Ctrl+V)"
+                      className="textarea-field"
+                      rows={4}
+                    />
+                  </div>
+
+                  <div className="field-group">
+                    <label className="field-label field-label--mid" htmlFor="ctx-msg">
+                      Contexto da conversa (opcional)
+                    </label>
+                    <textarea
+                      id="ctx-msg"
+                      value={context}
+                      onChange={(e) => setContext(e.target.value)}
+                      placeholder="Ex: cliente gestante, DPP em julho, Einstein. Já recebeu o portfólio e o orçamento. Sumiu por 5 dias..."
+                      className="textarea-field textarea-field--secondary"
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="field-group">
+                    <div className="image-attach-row">
+                      <input
+                        ref={fileInputObjRef}
+                        type="file"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) addImageToList(file, setAttachedImagesObj);
+                          e.target.value = "";
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="attach-btn"
+                        onClick={() => fileInputObjRef.current?.click()}
+                        disabled={loading || attachedImagesObj.length >= 5}
+                      >
+                        📎 Anexar print{attachedImagesObj.length > 0 ? ` (${attachedImagesObj.length}/5)` : ""}
+                      </button>
+                      <span className="attach-hint">ou cole com Ctrl+V no campo acima</span>
+                    </div>
+                    <ImagePreviewList
+                      images={attachedImagesObj}
+                      onRemove={(i) => setAttachedImagesObj((prev) => prev.filter((_, idx) => idx !== i))}
+                    />
+                  </div>
+
+                  <div className="form-actions">
+                    <span className="form-hint">Ctrl + Enter (Windows) ou ⌘ + Enter (Mac) para enviar</span>
+                    <button
+                      type="button"
+                      className="btn-primary"
+                      onClick={() => handleSubmit()}
+                      disabled={loading || (!input.trim() && !attachedImagesObj.length)}
+                    >
+                      {loading ? "Gerando..." : "Gerar 2 opções →"}
+                    </button>
+                  </div>
+                </div>
+
+                {loading && (
+                  <div className="loading-panel stagger stagger-4" aria-busy="true" aria-live="polite">
+                    <LoadingDots />
+                    <p>Consultando o SOP e gerando duas alternativas de resposta...</p>
+                  </div>
+                )}
+
+                {error && (
+                  <div className="alert-error" role="alert">
+                    {error}
+                  </div>
+                )}
+
+                {result && !loading && (
+                  <div ref={resultRef} className="mb-lg">
+                    <div className="section-label section-label--micro mb-md">Duas opções geradas</div>
+                    <ResponseCard data={result} />
+                  </div>
+                )}
+
+                {history.length > 1 && (
+                  <div>
+                    <div className="section-label section-label--micro mb-md">Histórico da sessão</div>
+                    <div className="history-stack">
+                      {history.slice(1).map((item, i) => (
+                        <button
+                          key={`${item.ts?.getTime?.() ?? i}-${item.msg.slice(0, 24)}`}
+                          type="button"
+                          className="history-btn"
+                          onClick={() => loadHistory(item)}
+                        >
+                          <div className="history-stage">{item.result?.etapa || "Resposta"}</div>
+                          <div className="history-msg">&quot;{item.msg}&quot;</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
+            {activeMode === "assistant" && (
+              <>
+                <div className="hero-intro stagger stagger-2">
+                  <p>
+                    Tire dúvidas sobre o processo de venda, regras do SOP, protocolos e situações do dia a dia.{" "}
+                    <strong>Cole um print de conversa</strong> (Ctrl+V) para análise direta — sem precisar digitar
+                    tudo.
+                  </p>
+                </div>
+
+                <div className="chat-panel stagger stagger-3">
+                  <div className="chat-messages" ref={chatMessagesRef}>
+                    {assistantMessages.length === 0 ? (
+                      <div className="chat-empty">
+                        <strong>Assistente Comercial</strong>
+                        Faça uma pergunta ou cole um print de conversa para começar.
+                      </div>
+                    ) : (
+                      <>
+                        {assistantMessages.map((msg, i) => (
+                          <ChatBubble key={i} role={msg.role} content={msg.content} />
+                        ))}
+                        {assistantLoading && (
+                          <div className="chat-bubble-wrap chat-bubble-wrap--assistant">
+                            <div className="chat-bubble chat-bubble--assistant">
+                              <LoadingDots />
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+
+                  {assistantError && (
+                    <div className="alert-error" role="alert" style={{ margin: "0 16px 12px" }}>
+                      {assistantError}
+                    </div>
+                  )}
+
+                  <div className="chat-input-area">
+                    <ImagePreviewList
+                      images={attachedImagesAst}
+                      onRemove={(i) => setAttachedImagesAst((prev) => prev.filter((_, idx) => idx !== i))}
+                    />
+                    <div className="chat-input-row">
+                      <textarea
+                        className="chat-textarea"
+                        value={assistantInput}
+                        onChange={(e) => setAssistantInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleAssistantSubmit();
+                        }}
+                        onPaste={handlePasteAst}
+                        placeholder="Faça uma pergunta ou cole um print (Ctrl+V)..."
+                        rows={2}
+                        disabled={assistantLoading}
+                      />
+                      <input
+                        ref={fileInputAstRef}
+                        type="file"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) addImageToList(file, setAttachedImagesAst);
+                          e.target.value = "";
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="chat-attach-btn"
+                        onClick={() => fileInputAstRef.current?.click()}
+                        title={attachedImagesAst.length >= 5 ? "Limite de 5 imagens atingido" : "Anexar print de conversa"}
+                        disabled={assistantLoading || attachedImagesAst.length >= 5}
+                        aria-label="Anexar imagem"
+                      >
+                        📎
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-send"
+                        onClick={handleAssistantSubmit}
+                        disabled={assistantLoading || (!assistantInput.trim() && !attachedImagesAst.length)}
+                      >
+                        {assistantLoading ? "..." : "Enviar →"}
+                      </button>
+                    </div>
+                    <span className="chat-hint">Ctrl + Enter para enviar • Cole imagens com Ctrl+V (máx. 5)</span>
+                  </div>
+                </div>
+              </>
+            )}
           </main>
         </div>
       </div>
@@ -534,7 +963,9 @@ export default function App() {
                 </button>
               </div>
             </div>
-            {sopPanelOpen && <iframe title="SOP comercial Hanna Rocha Fotografia" className="sop-panel__frame" src={SOP_PDF_HREF} />}
+            {sopPanelOpen && (
+              <iframe title="SOP comercial Hanna Rocha Fotografia" className="sop-panel__frame" src={SOP_PDF_HREF} />
+            )}
           </div>
         )}
       </aside>
