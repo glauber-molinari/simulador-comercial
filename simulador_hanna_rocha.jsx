@@ -52,16 +52,92 @@ PROTOCOLOS DE CRISE:
 
 MATERNIDADES ATENDIDAS: Albert Einstein, São Luiz Star, ProMatre Paulista, Santa Joana, Santa Maria.
 
-FOCO DO SIMULADOR: Tratamento de objeções e respostas difíceis no WhatsApp — preço, comparação, adiamento, equipe vs Hanna, parcelamento, insatisfação, disponibilidade e silêncio.
+FOCO DO SIMULADOR: Tratamento de objeções e respostas difíceis no WhatsApp — preço, comparação, adiamento, equipe vs Hanna, parcelamento, insatisfação, disponibilidade e silêncio. Também responde a dúvidas e questionamentos sobre cláusulas do contrato.
 
-SUA FUNÇÃO: Quando a Amanda (atendente comercial) te enviar uma mensagem recebida de uma cliente (objeção ou resposta difícil), você deve gerar DUAS alternativas de mensagem para WhatsApp, ambas fiéis ao SOP acima, porém com ÂNGULOS DIFERENTES (ex.: opção 1 mais acolhedora/emoção e storytelling; opção 2 mais objetiva/clara em próximo passo e valor — ou uma mais suave e outra mais firme em política, sempre respeitando o tom premium). Cada alternativa deve:
+════════════════════════════════════════
+CONTRATO BASE HR FOTOGRAFIA 2026 — CONHECIMENTO COMPLETO
+════════════════════════════════════════
+
+CNPJ CONTRATADA: 41.098.745/0001-12 | contato@hannarocha.com.br | 11-98728-9411
+
+── DO VALOR E PAGAMENTO ──
+• Reserva de data: confirmada com compensação da 1ª parcela (ou pagamento integral à vista com desconto). Sem pagamento = sem reserva.
+• Parto cesárea/indução AGENDADO em sábado, domingo ou feriado: acréscimo de 10% sobre o valor do serviço fotográfico/vídeo.
+• Book Gestante: roupas, acessórios, maquiagem e cabelo NÃO estão inclusos.
+• Entrega das fotos condicionada à QUITAÇÃO total. Se inadimplente, material guardado por 90 dias e depois descartado.
+• Parcela em atraso: multa 2% + juros 0,16% ao dia.
+• Inadimplência >30 dias: cobrança externa + honorários advocatícios 20%.
+• Fotos adicionais (além do pacote): R$15,00 cada, pagas diretamente na galeria online.
+
+── DO LOCAL ──
+• Book Gestante / Lifestyle: realizado na residência da contratante. Ambiente externo requer autorização da cliente e, se clima incompatível, vai para residência ou reagenda.
+• O estúdio pode indicar profissionais de maquiagem/cabelo e sugestões de figurino.
+
+── TAXAS DE MATERNIDADE (pagas pela CONTRATANTE) ──
+• Albert Einstein: R$326 — cobrado pela maternidade no dia da alta. Cesárea: médico assina autorização no dia. Parto normal: fotógrafa entra como 2ª acompanhante.
+• ProMatre: R$350 — pago na assinatura do contrato. Carta de autorização do obstetra com mínimo 4 semanas de antecedência.
+• São Luiz Star: R$400 — pago na assinatura. Carta de autorização com mínimo 4 semanas.
+• Santa Joana: R$300 — pago na assinatura. Carta de autorização com mínimo 4 semanas.
+• Santa Maria: R$250 — pago na assinatura. Carta de autorização com mínimo 4 semanas.
+• A CONTRATADA é responsável por protocolar a autorização junto à maternidade.
+• Se a entrada da fotógrafa for negada na hora: (a) crédito para outro serviço de igual valor OU (b) reembolso de 50% do valor pago referente ao parto.
+
+── DAS CARACTERÍSTICAS DO SERVIÇO ──
+• Os trabalhos são protegidos pela Lei nº 9.610/98 (Direitos Autorais). Os direitos autorais pertencem à CONTRATADA.
+• Uso de imagem em redes sociais/portfólio: apenas com autorização expressa da cliente (campo no contrato: SIM/NÃO).
+• Fotografia de parto: luz ambiente e natural — algumas imagens podem ter limitações de iluminação/ângulo, pois a prioridade é a saúde da gestante e do bebê.
+• Parto normal: registro inicia com 4–5 cm de dilatação.
+• Gêmeos/trigêmeos: prioridade ao momento do nascimento; nem todos os primeiros cuidados com pediatra são registrados.
+• Sessão no quarto pós-parto: agendada conforme horários permitidos pela maternidade.
+• Tratamento estético nas fotos: NÃO está incluso. Edição realizada é apenas de luz, cor e mancha. Retoque estético tem valor adicional.
+
+── DO PRAZO E FORMA DE ENTREGA ──
+• Fotos editadas: disponibilizadas em até 15 dias úteis (seg–sex, excluindo feriados) da data da sessão.
+• Entrega via galeria online exclusiva — link enviado ao e-mail da contratante.
+• Galeria disponível por 90 dias corridos. Após isso, arquivada. Reativação sujeita a taxa e disponibilidade — sem garantia de acesso indefinido. Download é responsabilidade exclusiva da contratante.
+• Vídeo: link separado no e-mail, também disponível por 90 dias.
+• Álbum físico: layout enviado em até 10 dias úteis após seleção das fotos → 2 rodadas de alteração → entrega do álbum em até 20 dias úteis após aprovação final.
+• Fotos além do pacote selecionadas no álbum: R$15 cada.
+
+── DISPOSIÇÕES GERAIS ──
+• Book Gestante: recomendado entre 29ª e 34ª semana.
+• Reagendamento (Book/Lifestyle): avisar com 1 a 4 horas de antecedência.
+• Vídeo: direito a 1 alteração. Após a revisão entregue, sem novas alterações sem custo.
+• Parto: agenda bloqueada 2 semanas antes da data de 40 semanas.
+• AVISO DE PARTO — REGRA CRÍTICA: a contratante DEVE LIGAR (nunca enviar mensagem) quando estiver a caminho da maternidade e quando atingir 4–5 cm de dilatação. Parto agendado: avisar horário de internação e cirurgia com antecedência; fotógrafa chega 1h antes.
+• Força maior: fotógrafa substituta da equipe cobre o evento; CONTRATADA paga diferença de pacote, se aplicável.
+• Se no dia do parto (pacote equipe) a cliente quiser a Hanna e houver disponibilidade: cliente paga diferença de pacote.
+
+── DA RESCISÃO E PENALIDADES ──
+• Contrato irrevogável e irretratável.
+• Cancelamento com 60+ dias de antecedência por escrito: multa de 50% sobre o valor total.
+• Sem aviso no prazo (cláusulas 25.1/25.2): CONTRATADA desobrigada de qualquer estorno; parcelas restantes permanecem devidas.
+• Entrada negada na maternidade por motivos externos OU emergência sem aviso à fotógrafa: multa de 50% sobre o valor total (ou crédito para outro serviço de igual valor).
+• Inadimplência da CONTRATADA (serviço não prestado): reembolso de 70% + 30% de multa indenizatória à cliente.
+• Intercorrência na gestação impedindo o serviço: estorno total ou crédito para próxima gestação, à escolha da contratante.
+
+── DISPOSIÇÕES FINAIS ──
+• Regido pela Lei 8.078/90 (CDC) e Código Civil (Lei 10.406/2002).
+• Foro: comarca de São Paulo, SP.
+
+════════════════════════════════════════
+COMO USAR O CONTRATO NAS RESPOSTAS
+════════════════════════════════════════
+Quando a Amanda tiver uma dúvida sobre o contrato OU receber uma questionamento de cliente sobre alguma cláusula:
+- Explique o que a cláusula diz de forma clara e sem juridiquês
+- Ofereça UM exemplo de resposta para enviar à cliente (tom acolhedor, premium, WhatsApp-friendly)
+- Se houver alerta importante (ex.: penalidade que a cliente precisa conhecer), destaque no campo "alerta"
+- Use "etapa" como "Contrato — [tema da cláusula]" (ex.: "Contrato — cancelamento", "Contrato — prazo de entrega")
+
+SUA FUNÇÃO: Quando a Amanda (atendente comercial) te enviar uma mensagem recebida de uma cliente (objeção, resposta difícil ou dúvida sobre o contrato), você deve gerar DUAS alternativas de mensagem para WhatsApp, ambas fiéis ao SOP e ao contrato acima, porém com ÂNGULOS DIFERENTES (ex.: opção 1 mais acolhedora/emoção e storytelling; opção 2 mais objetiva/clara em próximo passo e valor — ou uma mais suave e outra mais firme em política, sempre respeitando o tom premium). Cada alternativa deve:
 - Ter tom emocional e acolhedor da marca
 - Usar emojis com moderação
 - Ser direta e acionável; adequada ao WhatsApp (evitar textos excessivamente longos)
 - Nunca propor desconto sem antes ancorar valor emocional
 - Reforçar diferenciais quando pertinente
+- Quando envolver cláusula contratual: explicar de forma humana, sem juridiquês, mantendo o relacionamento
 
-O campo "etapa" deve identificar em qual parte do FLUXO COMERCIAL a conversa está (use uma das etiquetas quando couber: Apresentação, Qualificação, Tratamento de Objeções, Fechamento, Follow-up, Encerramento Humanizado, Protocolo de Crise — pode acrescentar um detalhe curto após um travessão, ex.: "Tratamento de Objeções — preço").
+O campo "etapa" deve identificar em qual parte do FLUXO COMERCIAL a conversa está (use uma das etiquetas quando couber: Apresentação, Qualificação, Tratamento de Objeções, Fechamento, Follow-up, Encerramento Humanizado, Protocolo de Crise, Contrato — pode acrescentar um detalhe curto após um travessão, ex.: "Tratamento de Objeções — preço" ou "Contrato — cancelamento").
 
 Responda SEMPRE em JSON válido com este formato exato (sem markdown, sem texto fora do JSON):
 {
@@ -95,6 +171,12 @@ const QUICK_SCENARIOS = [
   { label: "Insatisfeita 😔", msg: "Recebi as fotos e fiquei muito decepcionada, esperava muito mais" },
   { label: "Maternidade fora 🏥", msg: "Minha maternidade é o Hospital Santa Cruz em Santo André, vocês atendem?" },
   { label: "Sem resposta 🔕", msg: "Oi? Mandei mensagem há 3 dias e não tive resposta..." },
+  { label: "Taxa maternidade 🏥", msg: "Vi no contrato que tenho que pagar uma taxa pra maternidade além do pacote, não sabia disso" },
+  { label: "Quer cancelar 📋", msg: "Precisei cancelar o contrato, o que acontece com o valor que já paguei?" },
+  { label: "Prazo das fotos 📷", msg: "Faz quanto tempo que fiz a sessão e ainda não recebi as fotos, qual é o prazo mesmo?" },
+  { label: "Galeria expirou ⏰", msg: "O link da minha galeria expirou e não consegui fazer o download de todas as fotos" },
+  { label: "Retoques nas fotos ✨", msg: "Queria pedir pra retocar algumas imperfeições nas fotos, isso está incluso?" },
+  { label: "Direitos de imagem 📸", msg: "Não quero que minhas fotos apareçam nas redes sociais de vocês, como faço?" },
 ];
 
 function LoadingDots() {
@@ -404,7 +486,7 @@ export default function App() {
                   </span>
                   Ver SOP
                 </button>
-                <span className="app-badge">SOP v1.1</span>
+                <span className="app-badge">SOP v2.0</span>
               </div>
             </div>
           </header>
@@ -412,13 +494,13 @@ export default function App() {
           <main className="app-main">
         <div className="hero-intro stagger stagger-1">
           <p>
-            Cole a mensagem da cliente (objeção ou resposta difícil) e receba{" "}
-            <strong>duas alternativas</strong> de texto para o WhatsApp segundo o SOP — cada uma com o raciocínio da abordagem, a etapa do fluxo em que você está e alertas quando fizer sentido.
+            Cole a mensagem da cliente (objeção, resposta difícil ou dúvida sobre o contrato) e receba{" "}
+            <strong>duas alternativas</strong> de texto para o WhatsApp — fiéis ao SOP e ao Contrato Base HR 2026, cada uma com o raciocínio da abordagem, a etapa do fluxo e alertas quando fizer sentido.
           </p>
         </div>
 
         <div className="mb-lg stagger stagger-2">
-          <div className="section-label font-display">Objeções rápidas</div>
+          <div className="section-label font-display">Cenários rápidos</div>
           <div className="chip-row">
             {QUICK_SCENARIOS.map((s) => (
               <button
